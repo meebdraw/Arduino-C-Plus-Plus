@@ -1,0 +1,36 @@
+const int trigPin = 11;
+const int echoPin = 12;
+long duration;
+int distance;
+bool isObject = false;
+
+void setup() {
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+  pinMode(LED_BUILTIN, OUTPUT);
+  Serial.begin(115200);
+}
+
+void loop() {
+  digitalWrite(trigPin, LOW);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+  duration = pulseIn(echoPin, HIGH);
+  distance = duration * 0.034 / 2;
+  delay(200);
+  if (distance > 30 && !isObject) {
+    Serial.println("Waiting to Detect an Object");
+    delay (1000);
+  }
+  if (distance < 30 && !isObject){
+    Serial.println("Object Detected & Present");
+    delay(1000);
+    isObject = true;
+  }
+  if (distance >= 30 && isObject){
+    Serial.println("Detected Object is Gone");
+    delay(1000);
+    isObject = false;
+  }
+}
